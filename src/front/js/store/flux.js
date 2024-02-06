@@ -29,6 +29,46 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
+      register: async (email, password) => {
+        const opts = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        };
+        try {
+          const resp = await fetch(
+            "https://ubiquitous-space-spoon-wrgxgpw7xv7cjv-3001.app.github.dev/api/register",
+            opts
+          );
+          const data = await resp.json();
+          if (resp.status === 409) {
+            setStore({ message: "Email or username already in use" });
+            return {
+              success: false,
+              message: "Email or username already in use",
+            };
+          } else if (resp.status === 200 || resp.status === 201) {
+            sessionStorage.setItem("token", data.access_token);
+            setStore({ token: data.access_token });
+            return { success: true, message: "Registration successful" };
+          } else {
+            setStore({
+              message: data.message || "An error occurred during registration",
+            });
+            return {
+              success: false,
+              message: data.message || "An error occurred during registration",
+            };
+          }
+        } catch (error) {
+          console.log("Registration Error", error);
+          return { success: false, message: "An unexpected error occurred" };
+        }
+      },
+
       logout: () => {
         sessionStorage.removeItem("token");
         console.log("logout");
@@ -51,7 +91,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             opts
           );
           if (resp.status !== 200) {
-            alert("Invalid credentials");
+            alert("Thanks for Registering! Please login to continue.");
             return false;
           }
 

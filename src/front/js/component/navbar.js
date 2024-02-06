@@ -17,9 +17,17 @@ export const Navbar = () => {
         </Link>
         <div className="ml-auto">
           {!sessionStorage.getItem("token") ? (
-            <Link to="/login">
-              <button className="btn btn-primary">Login</button>
-            </Link>
+            <>
+              <Link to="/login">
+                <button className="btn btn-primary">Login</button>
+              </Link>
+              {/* Moved Register button to be shown when there's no token */}
+              <Link to="/register">
+                {" "}
+                {/* Assuming you have a route for registration */}
+                <button className="btn btn-secondary">Register</button>
+              </Link>
+            </>
           ) : (
             <button className="btn btn-primary" onClick={handleLogout}>
               Logout
