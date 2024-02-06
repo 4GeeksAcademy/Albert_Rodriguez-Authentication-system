@@ -17,7 +17,7 @@ export const Register = () => {
       setEmail("");
       setPassword("");
 
-      alert("Registration was successful!");
+      alert("Registration was successful! Please login to continue.");
 
       navigate("/");
     } else {
